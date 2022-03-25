@@ -47,6 +47,8 @@ func ConfirmPrompt(msg string) (bool, error) {
 
 func GetPassFromTerm(confirm bool) ([]byte, error) {
 	fmt.Fprint(os.Stderr, "Enter password for private key: ")
+	// Unnecessary convert of syscall.Stdin on *nix, but Windows is a uintptr
+	// nolint:unconvert
 	pw1, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return nil, err
@@ -56,6 +58,8 @@ func GetPassFromTerm(confirm bool) ([]byte, error) {
 		return pw1, nil
 	}
 	fmt.Fprint(os.Stderr, "Enter password for private key again: ")
+	// Unnecessary convert of syscall.Stdin on *nix, but Windows is a uintptr
+	// nolint:unconvert
 	confirmpw, err := term.ReadPassword(int(syscall.Stdin))
 	fmt.Fprintln(os.Stderr)
 	if err != nil {

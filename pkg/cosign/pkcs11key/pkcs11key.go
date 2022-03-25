@@ -130,6 +130,8 @@ func GetKeyWithURIConfig(config *Pkcs11UriConfig, askForPinIfNeeded bool) (*Key,
 
 				if tokenInfo.Flags&pkcs11.CKF_LOGIN_REQUIRED == pkcs11.CKF_LOGIN_REQUIRED {
 					fmt.Fprintf(os.Stderr, "Enter PIN for key '%s' in PKCS11 token '%s': ", config.KeyLabel, config.TokenLabel)
+					// Unnecessary convert of syscall.Stdin on *nix, but Windows is a uintptr
+					// nolint:unconvert
 					b, err := term.ReadPassword(int(syscall.Stdin))
 					if err != nil {
 						return errors.Wrap(err, "get pin")

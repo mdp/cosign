@@ -195,6 +195,8 @@ func (k *Key) VerifySignature(signature, message io.Reader, opts ...signature.Ve
 
 func getPin() (string, error) {
 	fmt.Fprint(os.Stderr, "Enter PIN for security key: ")
+	// Unnecessary convert of syscall.Stdin on *nix, but Windows is a uintptr
+	// nolint:unconvert
 	b, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return "", err
