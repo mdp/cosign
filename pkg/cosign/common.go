@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/pkg/errors"
 	"golang.org/x/term"
@@ -46,7 +47,7 @@ func ConfirmPrompt(msg string) (bool, error) {
 
 func GetPassFromTerm(confirm bool) ([]byte, error) {
 	fmt.Fprint(os.Stderr, "Enter password for private key: ")
-	pw1, err := term.ReadPassword(0)
+	pw1, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func GetPassFromTerm(confirm bool) ([]byte, error) {
 		return pw1, nil
 	}
 	fmt.Fprint(os.Stderr, "Enter password for private key again: ")
-	confirmpw, err := term.ReadPassword(0)
+	confirmpw, err := term.ReadPassword(int(syscall.Stdin))
 	fmt.Fprintln(os.Stderr)
 	if err != nil {
 		return nil, err
